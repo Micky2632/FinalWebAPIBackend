@@ -3,7 +3,7 @@ import { conn } from "../../dbconnect";
 export const router = express.Router();
 router.get("/", async (_q, res) => {
   try {
-    const [r] = await conn.query("SELECT * FROM ORDERS ORDER BY id DESC");
+    const [r] = await conn.query("SELECT id, customer_id, box_count, status, ordered_at FROM ORDERS ORDER BY id DESC");
     res.json(r);
   } catch (error: any) {
     console.error("Order query failed:", error);
@@ -27,7 +27,7 @@ router.get("/nearby", async (req, res) => {
     const latitude = Number(req.query.latitude);
     const longitude = Number(req.query.longitude);
     if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return res.status(400).json({ error: "Please provide valid latitude and longitude" });
-    const [rows] = await conn.query(`SELECT o.*, c.first_name, c.last_name, c.phone, c.address, c.latitude, c.longitude FROM ORDERS o JOIN CUSTOMERS c ON c.id=o.customer_id`);
+    const [rows] = await conn.query(`SELECT o.id, o.customer_id, o.box_count, o.status, o.ordered_at, c.first_name, c.last_name, c.phone, c.address, c.latitude, c.longitude FROM ORDERS o JOIN CUSTOMERS c ON c.id=o.customer_id`);
     const nearby = (rows as any[]).map((order) => {
       const dLat = ((Number(order.latitude) - latitude) * Math.PI) / 180;
       const dLon = ((Number(order.longitude) - longitude) * Math.PI) / 180;
