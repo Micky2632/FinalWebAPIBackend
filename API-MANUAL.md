@@ -22,7 +22,39 @@ https://finalwebprojectapi.vercel.app
 Content-Type: application/json
 ```
 
+## สรุปเส้น API ทั้งหมด
+
+| Method | Endpoint | ใช้งาน |
+|---|---|---|
+| GET | `/` | ตรวจชื่อระบบ |
+| GET | `/health` | ตรวจสถานะฐานข้อมูล |
+| GET | `/api/customer` | แสดง/ค้นหาลูกค้า |
+| POST | `/api/customer` | เพิ่มลูกค้า |
+| GET | `/api/customer/:id` | ดูลูกค้าตาม ID |
+| GET | `/api/customer/nearby` | ค้นหาลูกค้าใกล้ตำแหน่ง |
+| PUT | `/api/customer/:id` | แก้ไขลูกค้า |
+| DELETE | `/api/customer/:id` | ลบลูกค้า |
+| GET | `/api/order` | แสดงออเดอร์ |
+| POST | `/api/order` | เพิ่มออเดอร์ |
+| GET | `/api/order/nearby` | ค้นหาออเดอร์ใกล้ตำแหน่ง |
+| PUT | `/api/order/:id` | แก้ไขออเดอร์ |
+| DELETE | `/api/order/:id` | ลบออเดอร์ |
+| POST | `/api/order/random` | สร้างออเดอร์ตัวอย่าง 20–30 รายการ |
+| DELETE | `/api/order/demo` | ลบออเดอร์ตัวอย่าง |
+| GET | `/api/rider` | แสดงไรเดอร์ |
+| GET | `/api/routing/latest` | แสดงแผนเส้นทางล่าสุด |
+
 ## ตรวจสอบระบบ
+
+### `GET /`
+
+ตรวจชื่อระบบ
+
+```json
+{
+  "name": "Final Web Project API"
+}
+```
 
 ### `GET /health`
 
@@ -37,6 +69,8 @@ Content-Type: application/json
 }
 ```
 
+ถ้าเชื่อมต่อฐานข้อมูลไม่ได้ จะตอบสถานะ `503` พร้อม `ok: false`
+
 ## Customer API
 
 ### แสดงลูกค้าทั้งหมด / ค้นหาชื่อ
@@ -45,6 +79,8 @@ Content-Type: application/json
 GET /api/customer
 GET /api/customer?name=สมชาย
 ```
+
+ไม่ส่ง `name` จะคืนลูกค้าทั้งหมด ส่วน `name` ใช้ค้นจาก `first_name` หรือ `last_name`
 
 ### เพิ่มลูกค้า
 
@@ -114,6 +150,14 @@ PUT /api/customer/:id
 }
 ```
 
+Response:
+
+```json
+{
+  "affected_rows": 1
+}
+```
+
 ### ลบลูกค้า
 
 ```http
@@ -155,6 +199,16 @@ Request body:
 
 `box_count` ต้องมีค่าตั้งแต่ 1 ถึง 3 กล่อง และระบบจะตั้งสถานะเริ่มต้นเป็น `ready`
 
+Response `201 Created`:
+
+```json
+{
+  "last_id": 1
+}
+```
+
+ค่า `status` เริ่มต้นของออเดอร์ใหม่คือ `ready`
+
 ### ค้นหาออเดอร์ที่อยู่ใกล้ตำแหน่งที่กำหนด
 
 ```http
@@ -162,6 +216,8 @@ GET /api/order/nearby?latitude=16.2435&longitude=103.2542
 ```
 
 ระบบจะแสดงออเดอร์ภายในระยะ 2 กิโลเมตร พร้อมข้อมูลลูกค้าและ `distance_km`
+
+ต้องส่ง query ทั้ง `latitude` และ `longitude` เป็นตัวเลข
 
 ### แก้ไขออเดอร์
 
@@ -184,6 +240,14 @@ PUT /api/order/:id
 
 ```http
 DELETE /api/order/:id
+```
+
+Response:
+
+```json
+{
+  "affected_rows": 1
+}
 ```
 
 ### สร้างออเดอร์ตัวอย่างจำนวน 20–30 รายการ
@@ -218,6 +282,8 @@ DELETE /api/order/demo
 GET /api/rider
 ```
 
+Response จะเป็น array ของข้อมูลจากตาราง `RIDERS`
+
 ## Routing API
 
 ### ดูแผนเส้นทางล่าสุด
@@ -233,6 +299,8 @@ GET /api/routing/latest
   "active_plan": null
 }
 ```
+
+ถ้ามีแผน ระบบจะคืนข้อมูลแผนล่าสุดไว้ในฟิลด์ `active_plan`
 
 ## รูปแบบ Error
 
@@ -254,10 +322,10 @@ GET /api/routing/latest
 
 ## สมาชิกกลุ่ม
 
-- เศรณี ภูนาโพธิ์
-- พงศกร ถุนพุฒดม
-- เอกอนุชา ไชยเสนา
-- ชินดนัย ภูหัดสวน
+- เศรณี ภูนาโพธิ์  67011212143
+- พงศกร ถุนพุฒดม  67011212094
+- เอกอนุชา ไชยเสนา  67011212105
+- ชินดนัย ภูหัดสวน 67011212026
 
 ## ตัวอย่างทดสอบด้วย PowerShell
 
