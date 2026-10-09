@@ -1,0 +1,185 @@
+# คู่มือการใช้งาน Web API
+
+ระบบจัดเส้นทางและแบ่งงานไรเดอร์สำหรับร้านข้าวกล่อง
+
+## Base URL
+
+Local:
+
+```text
+http://localhost:3000
+```
+
+Production:
+
+```text
+https://finalwebprojectapi.vercel.app
+```
+
+ทุก Request ที่ส่งข้อมูลต้องใช้ Header:
+
+```http
+Content-Type: application/json
+```
+
+## ตรวจสอบระบบ
+
+### `GET /health`
+
+ตรวจสอบว่า API เชื่อมต่อ MySQL สำเร็จหรือไม่
+
+ตัวอย่าง Response:
+
+```json
+{
+  "ok": true,
+  "database": "mysql"
+}
+```
+
+## Customer API
+
+### แสดงลูกค้าทั้งหมด / ค้นหาชื่อ
+
+```http
+GET /api/customer
+GET /api/customer?name=สมชาย
+```
+
+### เพิ่มลูกค้า
+
+```http
+POST /api/customer
+```
+
+Request body:
+
+```json
+{
+  "first_name": "สมชาย",
+  "last_name": "ใจดี",
+  "phone": "0812345678",
+  "address": "หอพัก A มมส.",
+  "latitude": 16.2435,
+  "longitude": 103.2542
+}
+```
+
+Response `201 Created`:
+
+```json
+{
+  "last_id": 1
+}
+```
+
+### แก้ไขลูกค้า
+
+```http
+PUT /api/customer/:id
+```
+
+ตัวอย่าง: `PUT /api/customer/1`
+
+```json
+{
+  "first_name": "สมชาย",
+  "last_name": "ใจดีมาก",
+  "phone": "0812345678",
+  "address": "หอพัก B มมส.",
+  "latitude": 16.244,
+  "longitude": 103.255
+}
+```
+
+### ลบลูกค้า
+
+```http
+DELETE /api/customer/:id
+```
+
+ตัวอย่าง Response:
+
+```json
+{
+  "affected_rows": 1
+}
+```
+
+## Order API
+
+### แสดงออเดอร์ทั้งหมด
+
+```http
+GET /api/order
+```
+
+ข้อมูลจะรวมข้อมูลลูกค้าที่เกี่ยวข้องด้วย
+
+### เพิ่มออเดอร์
+
+```http
+POST /api/order
+```
+
+Request body:
+
+```json
+{
+  "customer_id": 1,
+  "box_count": 2
+}
+```
+
+`box_count` ต้องมีค่าตั้งแต่ 1 ถึง 3 กล่อง และระบบจะตั้งสถานะเริ่มต้นเป็น `ready`
+
+## Rider API
+
+### แสดงไรเดอร์ทั้งหมด
+
+```http
+GET /api/rider
+```
+
+## Routing API
+
+### ดูแผนเส้นทางล่าสุด
+
+```http
+GET /api/routing/latest
+```
+
+ถ้ายังไม่มีแผน Response จะเป็น:
+
+```json
+{
+  "active_plan": null
+}
+```
+
+## รูปแบบ Error
+
+```json
+{
+  "error": "Database error"
+}
+```
+
+รหัสสถานะที่ใช้บ่อย:
+
+| Status | ความหมาย |
+|---|---|
+| 200 | สำเร็จ |
+| 201 | เพิ่มข้อมูลสำเร็จ |
+| 400 | ข้อมูลที่ส่งไม่ถูกต้อง |
+| 404 | ไม่พบข้อมูล |
+| 500 | เกิดข้อผิดพลาดภายในระบบ |
+
+## ตัวอย่างทดสอบด้วย PowerShell
+
+```powershell
+Invoke-RestMethod -Uri "https://finalwebprojectapi.vercel.app/api/customer" -Method GET
+Invoke-RestMethod -Uri "https://finalwebprojectapi.vercel.app/api/order" -Method GET
+```
+
+ไฟล์นี้อธิบายเฉพาะ API ที่มีอยู่ใน Backend เวอร์ชันปัจจุบัน
