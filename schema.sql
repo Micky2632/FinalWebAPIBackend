@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS ORDERS (
         'delivered',
         'cancelled'
     ) NOT NULL DEFAULT 'pending',
-    ordered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  ordered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  is_demo BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (customer_id) REFERENCES CUSTOMERS (id) ON DELETE CASCADE,
     CONSTRAINT chk_orders_box_count CHECK (box_count BETWEEN 1 AND 3)
 ) ENGINE = InnoDB;
