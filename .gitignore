@@ -1,0 +1,7 @@
+node_modules/
+.env
+npm-debug.log*
+
+.vercel
+dist/
+.vercel_password.tmp
