@@ -73,6 +73,20 @@ Response `201 Created`:
 }
 ```
 
+### ดึงข้อมูลลูกค้าตาม ID
+
+```http
+GET /api/customer/:id
+```
+
+ตัวอย่าง:
+
+```http
+GET /api/customer/1
+```
+
+ถ้าไม่พบข้อมูล จะตอบ `404 Customer not found`
+
 ### แก้ไขลูกค้า
 
 ```http

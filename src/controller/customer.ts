@@ -25,6 +25,21 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: "Database error" });
   }
 });
+router.get("/:id", async (req, res) => {
+  try {
+    const [rows] = await conn.query("SELECT * FROM CUSTOMERS WHERE id = ?", [
+      req.params.id,
+    ]);
+    const customers = rows as any[];
+    if (customers.length === 0) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+    res.json(customers[0]);
+  } catch {
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
 router.put("/:id", async (req, res) => {
   try {
     const c = req.body;
