@@ -7,4 +7,5 @@ export interface Order {
   box_count: number;
   status?: OrderStatus;
   ordered_at?: string;
+  is_demo?: boolean;
 }

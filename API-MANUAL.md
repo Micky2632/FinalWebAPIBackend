@@ -2,6 +2,19 @@
 
 ระบบจัดเส้นทางและแบ่งงานไรเดอร์สำหรับร้านข้าวกล่อง
 
+โครงสร้างฐานข้อมูลอ้างอิงตาม ERD ล่าสุด ประกอบด้วย `CUSTOMERS`, `ORDERS`,
+`ROUTING_RUNS`, `ROUTES`, `ROUTE_STOPS` และ `RIDERS` โดย Foreign Key
+เชื่อมตามความสัมพันธ์ใน ERD ดังนี้:
+
+- `ORDERS.customer_id` เชื่อมกับ `CUSTOMERS.id`
+- `ROUTES.routing_run_id` เชื่อมกับ `ROUTING_RUNS.id`
+- `ROUTES.rider_id` เชื่อมกับ `RIDERS.id`
+- `ROUTE_STOPS.route_id` เชื่อมกับ `ROUTES.id`
+- `ROUTE_STOPS.order_id` เชื่อมกับ `ORDERS.id`
+
+ฟิลด์ `is_demo` ใน `ORDERS` เป็นฟิลด์เสริมสำหรับแยกข้อมูลทดสอบที่สร้างจาก API
+และไม่เปลี่ยนความสัมพันธ์หลักใน ERD
+
 ## Base URL
 
 Local:
