@@ -12,8 +12,6 @@
 - `ROUTE_STOPS.route_id` เชื่อมกับ `ROUTES.id`
 - `ROUTE_STOPS.order_id` เชื่อมกับ `ORDERS.id`
 
-ฟิลด์ `is_demo` ใน `ORDERS` เป็นฟิลด์เสริมสำหรับแยกข้อมูลทดสอบที่สร้างจาก API
-และไม่เปลี่ยนความสัมพันธ์หลักใน ERD
 
 ## Base URL
 
@@ -52,8 +50,6 @@ Content-Type: application/json
 | GET | `/api/order/nearby` | ค้นหาออเดอร์ใกล้ตำแหน่ง |
 | PUT | `/api/order/:id` | แก้ไขออเดอร์ |
 | DELETE | `/api/order/:id` | ลบออเดอร์ |
-| POST | `/api/order/random` | สร้างออเดอร์ตัวอย่าง 20–30 รายการ |
-| DELETE | `/api/order/demo` | ลบออเดอร์ตัวอย่าง |
 | GET | `/api/rider` | แสดงไรเดอร์ |
 | GET | `/api/routing/latest` | แสดงแผนเส้นทางล่าสุด |
 
@@ -262,30 +258,6 @@ Response:
   "affected_rows": 1
 }
 ```
-
-### สร้างออเดอร์ตัวอย่างจำนวน 20–30 รายการ
-
-```http
-POST /api/order/random
-```
-
-Request body (ไม่ส่ง body จะสร้าง 20 รายการ):
-
-```json
-{
-  "amount": 20
-}
-```
-
-ออเดอร์ที่สร้างจากเส้นนี้จะถูกทำเครื่องหมาย `is_demo = true`
-
-### ลบออเดอร์ตัวอย่างทั้งหมด
-
-```http
-DELETE /api/order/demo
-```
-
-ก่อนใช้เส้นสุ่มข้อมูล ต้องมีคอลัมน์ `is_demo` ในตาราง `ORDERS` ตาม `schema.sql`
 
 ## Rider API
 

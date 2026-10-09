@@ -13,8 +13,8 @@ router.get("/", async (_q, res) => {
 router.post("/", async (req, res) => {
   try {
     const [r] = await conn.query(
-      "INSERT INTO ORDERS(customer_id,box_count,status,is_demo) VALUES(?,?,?,?)",
-      [req.body.customer_id, req.body.box_count, "ready", false],
+      "INSERT INTO ORDERS(customer_id,box_count,status) VALUES(?,?,?)",
+      [req.body.customer_id, req.body.box_count, "ready"],
     );
     res.status(201).json({ last_id: (r as any).insertId });
   } catch {
@@ -48,25 +48,7 @@ router.put("/:id", async (req, res) => {
   } catch { res.status(500).json({ error: "Database error" }); }
 });
 
-router.delete("/demo", async (_req, res) => {
-  try { const [result] = await conn.query("DELETE FROM ORDERS WHERE is_demo = TRUE"); res.json({ deleted_orders: (result as any).affectedRows }); }
-  catch { res.status(500).json({ error: "Database error" }); }
-});
-
 router.delete("/:id", async (req, res) => {
   try { const [result] = await conn.query("DELETE FROM ORDERS WHERE id=?", [req.params.id]); if (!(result as any).affectedRows) return res.status(404).json({ error: "Order not found" }); res.json({ affected_rows: (result as any).affectedRows }); }
   catch { res.status(500).json({ error: "Database error" }); }
-});
-
-router.post("/random", async (req, res) => {
-  try {
-    const amount = Number(req.body.amount ?? 20);
-    if (!Number.isInteger(amount) || amount < 20 || amount > 30) return res.status(400).json({ error: "amount must be between 20 and 30" });
-    const [customers] = await conn.query("SELECT id FROM CUSTOMERS");
-    if (!(customers as any[]).length) return res.status(400).json({ error: "No customers available" });
-    const values = Array.from({ length: amount }, () => { const customer = (customers as any[])[Math.floor(Math.random() * (customers as any[]).length)]; return [customer.id, Math.floor(Math.random() * 3) + 1, "pending", true]; });
-    const placeholders = values.map(() => "(?,?,?,?)").join(",");
-    const [result] = await conn.query(`INSERT INTO ORDERS (customer_id,box_count,status,is_demo) VALUES ${placeholders}`, values.flat());
-    res.status(201).json({ message: "Random orders generated", amount, first_id: (result as any).insertId });
-  } catch { res.status(500).json({ error: "Database error" }); }
 });

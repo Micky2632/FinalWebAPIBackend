@@ -85,14 +85,6 @@
           }
         },
         {
-          "name": "Generate random demo orders",
-          "request": {
-            "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"amount\": 20\n}" },
-            "url": "{{baseUrl}}/api/order/random"
-          }
-        },
-        {
           "name": "Update order",
           "request": {
             "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }],
@@ -100,8 +92,7 @@
             "url": "{{baseUrl}}/api/order/{{orderId}}"
           }
         },
-        { "name": "Delete order", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/order/{{orderId}}" } },
-        { "name": "Delete demo orders", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/order/demo" } }
+        { "name": "Delete order", "request": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/api/order/{{orderId}}" } }
       ]
     },
     {
